@@ -6,9 +6,34 @@
 			{
 				'voc':'vengeance',
 				'description': 'Punishment inflicted or retribution exacted for an injury or wrong.'
-				
+
 			}
 		]
 	},
 	{},
 ]
+
+1. prescience
+	Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd:
+2. vengeance
+
+daily_article
+	beforehand: '單字很多，所以分成八天'
+	date: {'month': 'January, 'date': '15', 'year':'2021'}
+	title: 'Internet 3.0 and the Beginning of (Tech) History',
+	link: 'https://stratechery.com/2021/internet-3-0-and-the-beginning-of-tech-history/',
+	id_one_article: 1,
+	num_one_article: 8,
+	content:[
+		{
+			quote: "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd"
+			vocs:[
+				{'voc':'prescience', 'bookmarked': false},
+		},
+		{
+			quote: "Now that history has returned with the vengeance of the long-dismissed, few analyses of our present moment are complete without a ritual mockery of Fukuyama’s seemingly naive assumptions."
+			vocs:[
+				{'voc':'vengeance', 'bookmarked': false},
+				{'voc':'ritual', 'bookmarked': false},
+				{'voc':'mockery', 'bookmarked': true}
+			],
