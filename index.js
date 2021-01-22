@@ -12,7 +12,50 @@ $(document).ready(function() {
 			
 		}
 	}
-		
+	data_practice = {
+		'title':{
+			'content':'Internet 3.0 and the Beginning of (Tech) History',
+			'link':'https://stratechery.com/2021/internet-3-0-and-the-beginning-of-tech-history/'
+		},
+		'date': {
+			'year': '2021',
+			'month': 'January',
+			'day': '15'
+		},
+		'tags':[
+			'Stratechery','test'
+		],
+		'quizzes':[
+			{
+				'question':'c_ _ _ _ _ _ (7 char)',
+				'answer':'contemt',
+				'definition':'The feeling that a person or a thing is beneath consideration, worthless, or deserving scorn.'
+				'quote': {
+					'content': "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd",
+					'tags':['Stratechery']
+				},
+				'examples': [
+					"At school she had complete c______ for all her teachers.",
+					"You should treat those remarks with the c______ that they deserve.",
+					"She's beneath c______ (= I have no respect for her)!"
+				]
+			},
+			{
+				'question':'c_ _ _ _ _ _ (7 char)',
+				'answer':'contemt',
+				'definition':'The feeling that a person or a thing is beneath consideration, worthless, or deserving scorn.'
+				'quote': {
+					'content': "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd",
+					'tags':['Stratechery']
+				},
+				'examples': [
+					"At school she had complete c______ for all her teachers.",
+					"You should treat those remarks with the c______ that they deserve.",
+					"She's beneath c______ (= I have no respect for her)!"
+				]
+			},
+		]
+	}
 	data_articles = {
 		'articles' : [
 			{
