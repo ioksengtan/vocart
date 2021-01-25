@@ -511,10 +511,18 @@ function show_practice_main() {
     $('#practice_main').show();
 }
 
-function show_vocart_main(date) {
+function show_vocart_main(date) {	
     //console.log(date);
     $('#all_articles_main').hide()
     $('#main').hide();
     $('#vocart_main').show();
     $('#practice_main').hide();
+	
+	if(date == 'latest'){
+		parameter.command = 'getLatestArticle';
+		$.get(appUrl, parameter, function(data) {
+			console.log(data);
+		});
+	}
+	
 }
