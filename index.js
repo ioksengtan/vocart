@@ -165,10 +165,9 @@ $(document).ready(function() {
     var componentVocartTags = Object.create(ComponentVocartTags);
 
     var componentPractice = Object.create(ComponentPractice);
-    var componentVocarts = Object.create(ComponentVocarts);
+    
     var componentVocartCalendar = Object.create(ComponentVocartCalendar);
-    componentVocarts.create(DataVocarts);
-
+	
     componentPractice.create(DataPractice);
     componentVocartCalendar.create(DataVocartCalendar);
     renderComponent('#calendar_main', componentVocartCalendar);
@@ -176,7 +175,7 @@ $(document).ready(function() {
     renderComponent('#vocart_tags', componentVocartTags);
 
     renderComponent('#practice_main', componentPractice);
-    renderComponent('#vocarts', componentVocarts);
+    
 
 
 });
@@ -305,7 +304,7 @@ var ComponentPractice = {
 var ComponentVocarts = {
     dom: '',
     create: function(DataVocarts) {
-        //console.log(DataVocarts);
+        console.log(DataVocarts);
         var ele = document.createElement('div');
         $(ele).append('Source: <h2>' + DataVocarts.title.content + '<h2>');
         for (var i in DataVocarts.vocarts) {
@@ -467,7 +466,6 @@ function show_all_articles() {
 
             var input_buffer = JSON.parse(data);
             //console.log(input_buffer);
-            input_buffer.table
             DataArticles = {}
             DataArticles['articles'] = input_buffer.table;
             var componentArticles = Object.create(ComponentArticles);
@@ -510,7 +508,7 @@ function show_practice_main() {
     $('#vocart_main').hide();
     $('#practice_main').show();
 }
-
+var tmp='test';
 function show_vocart_main(date) {	
     //console.log(date);
     $('#all_articles_main').hide()
@@ -521,7 +519,11 @@ function show_vocart_main(date) {
 	if(date == 'latest'){
 		parameter.command = 'getLatestArticle';
 		$.get(appUrl, parameter, function(data) {
-			console.log(data);
+			//console.log(data);			
+			var DataVocarts = JSON.parse(data);
+			var componentVocarts = Object.create(ComponentVocarts);
+			componentVocarts.create(DataVocarts.table);
+			renderComponent('#vocarts', componentVocarts);
 		});
 	}
 	
