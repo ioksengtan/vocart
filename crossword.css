@@ -1,0 +1,48 @@
+
+
+element.style {
+    height: 100px;
+    width: 100px;
+}
+
+.crossword .nb {
+    border: none;
+    position: relative;
+}
+
+.crossword td {
+    border: 1px solid black;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+}
+.crossword .b {
+    background-color: #FCFCFC;
+    -moz-box-shadow: 2px 2px 2px #535353;
+    -webkit-box-shadow: 2px 2px 2px #535353;
+    box-shadow: 2px 2px 2px #535353;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.n {
+    position: absolute;
+    font-size: 8pt;
+    margin: 0px 0px 0px 0px;
+    line-height: 8pt;
+    font-weight: bold;
+}
+
+
+.od {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}

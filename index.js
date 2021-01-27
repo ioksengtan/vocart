@@ -115,70 +115,99 @@ $(document).ready(function() {
         ]
     }
 
-    DataVocarts = {
-        'title': {
-            'content': 'Internet 3.0 and the Beginning of (Tech) History',
-            'link': 'https://stratechery.com/2021/internet-3-0-and-the-beginning-of-tech-history/'
-        },
-        'date': {
-            'year': '2021',
-            'month': 'January',
-            'day': '15'
-        },
-        'tags': [
-            'Stratechery', 'test'
-        ],
-        'vocarts': [{
-                'quote': "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd",
-                'vocs': [{
-                        'voc': 'prescience',
-                        'definition': 'the ability to know or correctly suggest what will happen in the future.'
-                    },
-                    {
-                        'voc': 'test',
-                        'definition': 'test'
-                    }
-                ]
-            },
-            {
-                'quote': "Now that history has returned with the vengeance of the long-dismissed, few analyses of our present moment are complete without a ritual mockery of Fukuyama’s seemingly naive assumptions.",
-                'vocs': [{
-                        'voc': "vengeance",
-                        'definition': "Punishment inflicted or retribution exacted for an injury or wrong."
-                    },
-                    {
-                        'voc': "contemp",
-                        'definition': "The feeling that a person or a thing is beneath consideration, worthless, or deserving scorn.",
-                        'examples': [
-                            "At school she had complete contempt for all her teachers.",
-                            "You should treat those remarks with the contempt that they deserve.",
-                            "She's beneath contempt (= I have no respect for her)!"
-                        ]
-                    },
-                ]
-            },
-
-        ]
-    };
 
     var componentVocartTitle = Object.create(ComponentVocartTitle);
     var componentVocartTags = Object.create(ComponentVocartTags);
 
     var componentPractice = Object.create(ComponentPractice);
     
-    var componentVocartCalendar = Object.create(ComponentVocartCalendar);
+    
 	
     componentPractice.create(DataPractice);
-    componentVocartCalendar.create(DataVocartCalendar);
-    renderComponent('#calendar_main', componentVocartCalendar);
+	
+	
     renderComponent('#vocart_title', componentVocartTitle);
     renderComponent('#vocart_tags', componentVocartTags);
 
     renderComponent('#practice_main', componentPractice);
     
+	parameter.command = 'getAllArticles';
+		$.get(appUrl, parameter, function(data) {
+			//console.log(data);			
+			DataArticles = JSON.parse(data);
+			//var componentVocarts = Object.create(ComponentVocarts);
+			//componentVocarts.create(DataVocarts.table);
+			//renderComponent('#vocarts', componentVocarts);
+			[DataVocartCalendar, ArticleId] = DataArticles2VocartCalendar(DataArticles);
+			var componentVocartCalendar = Object.create(ComponentVocartCalendar);
+			componentVocartCalendar.create(DataVocartCalendar, ArticleId);
+			renderComponent('#calendar_main', componentVocartCalendar);
+		});
+		
+		/*
+		DataVocartCalendar = {
 
+        2021: {
+            1: {
+                15: 'vocart',
+                16: 'na_tree-fill',
+                17: 'na_bicycle',
+                18: 'na_tree-fill',
+                19: 'na_tree-fill',
+                20: 'na_tree-fill',
+                21: 'na_tree-fill',
+                22: 'vocart',
+            }
+        },
+        2020: {
+            12: {
+                27: 'vocart',
+                30: 'vocart',
+            }
+        },
+
+
+    }*/
 
 });
+
+function DataArticles2VocartCalendar(DataArticles){
+	let VocartCalendar = {}
+	let ArticleId = {}
+	for (i in DataArticles.table){
+		var theYear = DataArticles.table[i].year;
+		var theMonth = DataArticles.table[i].month;
+		var theDate = DataArticles.table[i].date;
+		var theType = DataArticles.table[i].type;
+		var theArtId = DataArticles.table[i].art_id;
+		//console.log(theYear + ','+theMonth + ','+theDate+','+theType);
+		if (theYear in VocartCalendar){
+			if (theMonth in VocartCalendar[theYear]){
+				VocartCalendar[theYear][theMonth][theDate] = theType;
+				ArticleId[theYear][theMonth][theDate] = theArtId;
+			}else{
+				VocartCalendar[theYear][theMonth] = {};
+				VocartCalendar[theYear][theMonth][theDate] = theType;
+				ArticleId[theYear][theMonth] = {};
+				ArticleId[theYear][theMonth][theDate] = theArtId;
+			}
+		}else{
+			VocartCalendar[theYear] = {};
+			VocartCalendar[theYear][theMonth] = {};
+			VocartCalendar[theYear][theMonth][theDate] = theType;
+			ArticleId[theYear] = {};
+			ArticleId[theYear][theMonth] = {};
+			ArticleId[theYear][theMonth][theDate] = theArtId;
+		}
+		
+	}
+	
+	return [VocartCalendar, ArticleId]
+}
+
+function cleanDiv(div){
+	$(div).empty();
+}
 
 function renderComponent(div, component) {
     //console.log(component);
@@ -209,9 +238,9 @@ ComponentVocartTitle{
 
 var ComponentVocartCalendar = {
     dom: '',
-    create: function(DataVocartCalendar) {
+    create: function(DataVocartCalendar, ArticleId) {
         var ele = document.createElement('div');
-        years = ['2021', '2020'];
+        years = ['2021'];
         for (var year_id in years) {
             year = years[year_id];
             $(ele).append('<h3>' + year + '</h3>');
@@ -221,7 +250,7 @@ var ComponentVocartCalendar = {
                     if (DataVocartCalendar[year][month][date].includes("na")) {
                         $(ele).append('<i class="bi bi-' + DataVocartCalendar[year][month][date].split('na_')[1] + '"></i>');
                     } else {
-                        $(ele).append('<a href="javascript:show_vocart_main(' + year + ',' + month + ',' + date + ')">' + date + '</a> ');
+                        $(ele).append('<a href="javascript:show_vocart_main(' + ArticleId[year][month][date] + ')">' + date + '</a> ');
                     }
                 }
             }
@@ -257,56 +286,12 @@ var ComponentPractice = {
         //console.log(this.dom);
     }
 };
-/*
-		'title':{
-			'content':'Internet 3.0 and the Beginning of (Tech) History',
-			'link':'https://stratechery.com/2021/internet-3-0-and-the-beginning-of-tech-history/'
-		},
-		'date': {
-			'year': '2021',
-			'month': 'January',
-			'day': '15'
-		},
-		'tags':[
-			'Stratechery','test'
-		],
-		'quizzes':[
-			{
-				'question':'c_ _ _ _ _ _ (7 char)',
-				'answer':'contemt',
-				'definition':'The feeling that a person or a thing is beneath consideration, worthless, or deserving scorn.',
-				'quote': {
-					'content': "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd",
-					'tags':['Stratechery']
-				},
-				'examples': [
-					"At school she had complete c______ for all her teachers.",
-					"You should treat those remarks with the c______ that they deserve.",
-					"She's beneath c______ (= I have no respect for her)!"
-				]
-			},
-			{
-				'question':'c_ _ _ _ _ _ (7 char)',
-				'answer':'contemt',
-				'definition':'The feeling that a person or a thing is beneath consideration, worthless, or deserving scorn.',
-				'quote': {
-					'content': "Francis Fukuyama’s The End of History and the Last Man is, particularly relative to its prescience, one of the most misunderstood books of all time. Aris Roussinos explained at UnHerd",
-					'tags':['Stratechery']
-				},
-				'examples': [
-					"At school she had complete c______ for all her teachers.",
-					"You should treat those remarks with the c______ that they deserve.",
-					"She's beneath c______ (= I have no respect for her)!"
-				]
-			},
-		]
-		*/
 var ComponentVocarts = {
     dom: '',
     create: function(DataVocarts) {
-        console.log(DataVocarts);
+        //console.log(DataVocarts);
         var ele = document.createElement('div');
-        $(ele).append('Source: <h2>' + DataVocarts.title.content + '<h2>');
+        //$(ele).append('<h2>' + DataVocarts.title.content + '<h2>');
         for (var i in DataVocarts.vocarts) {
             var componentVocart_reg = Object.create(ComponentVocart);
             componentVocart_reg.create(DataVocarts.vocarts[i]);
@@ -317,25 +302,6 @@ var ComponentVocarts = {
 
 }
 
-/*
-	reg_str="<blockquote class='blockquote bg-light '>\
-          <p class='mb-0'>\
-        " +  vocart.quote +"</p>\
-        </blockquote>";
-		for(voc_id in vocart.vocs){
-			reg_str+= "<div class='card mb-3 border-white ' style='max-width: 100%;'>\
-          <div class='card-header bg-white'><i class='bi bi-bookmark-star'></i>" + vocart.vocs[voc_id].voc +" </div>\
-          <div class='card-body'>\
-            <p class='card-text'>"+ vocart.vocs[voc_id].definition +"</p>";
-			
-			for(example_id in vocart.vocs[voc_id].examples){
-				reg_str+="ex:  " + vocart.vocs[voc_id].examples[example_id]+"<br/>";
-			}
-			reg_str+="\
-          </div>\
-        </div>";
-		}
-*/
 var ComponentVocart = {
     dom: '',
     create: function(DataVocart) {
@@ -460,12 +426,17 @@ function show_all_articles() {
     $('#vocart_main').hide();
     $('#all_articles_main').show()
     $('#practice_main').hide();
+	
     if (load_status.articles == false) {
         load_status.articles = true
+		parameter = {
+			url: sheetsUrl,
+			command: 'getAllArticles'
+		};
         $.get(appUrl, parameter, function(data) {
-
+		
             var input_buffer = JSON.parse(data);
-            //console.log(input_buffer);
+            console.log(input_buffer);
             DataArticles = {}
             DataArticles['articles'] = input_buffer.table;
             var componentArticles = Object.create(ComponentArticles);
@@ -474,31 +445,7 @@ function show_all_articles() {
 
         });
     }
-    /*
-		DataArticles = {
-		'articles' : [
-			{
-				'title':'Internet 3.0 and the Beginning of (Tech) History',
-				'link': 'https://stratechery.com/2021/internet-3-0-and-the-beginning-of-tech-history/',
-				'year': '2021',
-				'month': '1',
-				'date':'17',
-			},
-			{
-				'title': 'techmeme 2021-01-18',
-				'year': '2021',
-				'month': '1',
-				'date':'21',
-			},
-			{
-				'title': 'techmeme 2021-01-19',
-				'year': '2021',
-				'month': '1',
-				'date':'20',
-			},
-		]
-	}
-	*/
+	
 }
 
 function show_practice_main() {
@@ -517,12 +464,29 @@ function show_vocart_main(date) {
     $('#practice_main').hide();
 	
 	if(date == 'latest'){
+		cleanDiv('#vocarts')
 		parameter.command = 'getLatestArticle';
 		$.get(appUrl, parameter, function(data) {
 			//console.log(data);			
 			var DataVocarts = JSON.parse(data);
 			var componentVocarts = Object.create(ComponentVocarts);
 			componentVocarts.create(DataVocarts.table);
+			renderComponent('#vocarts', componentVocarts);
+		});
+	}else{
+		parameter = {
+			url: sheetsUrl,
+			name: sheetName,
+			command: 'getArticle',
+			article_id: date
+		};
+		cleanDiv('#vocarts')
+		$.get(appUrl, parameter, function(data) {
+			//console.log(data);			
+			var DataVocarts = JSON.parse(data);
+			var componentVocarts = Object.create(ComponentVocarts);
+			componentVocarts.create(DataVocarts.table);
+			
 			renderComponent('#vocarts', componentVocarts);
 		});
 	}
