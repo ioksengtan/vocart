@@ -10,7 +10,7 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <script src="index.js"></script>
+      <script src="new.js"></script>
       <title>Vocart</title>
    </head>
    <body>
@@ -25,14 +25,6 @@
             </div>
          </div>
       </div>
-      <div class="nav-scroller py-1 mb-2 ">
-         <nav class="nav d-flex justify-content-between">
-            <a class="p-2 text-muted" href="javascript:show_practice_main()">Practice</a>
-            <a class="p-2 text-muted" href="javascript:show_all_articles()">All Articles</a>
-            <a class="p-2 text-muted" href="javascript:show_vocart_main('latest')">Daily Vocs</a>
-            <a class="p-2 text-muted" href="#">About</a>
-         </nav>
-      </div>
       <main role="main" class="container ">
          <div class="row">
          <div class="col-md-12 blog-main ">
@@ -42,43 +34,14 @@
          <div class="blog-post col-md-4" id="calendar_main">
 			
          </div>
-		 <div class="col-md-8">
-		 <div class="blog-post" id="main">
-		 <h1>Vocart = vocaburary in articles.</h1>
-		 <p>
-		 來源有Stratechery, Bloomberg, techmeme, 還有相關書籍
-		 </p>
-		 
+		 <div class="col-md-12">
+		 <iframe height=800px width=100% src="https://jsoneditoronline.org/#left=cloud.ac09365f30b1401b8b45d41a11727af0">
+		  你的瀏覽器不支援 iframe
+		</iframe>
+		<textarea id='input_text' style="width:1000px;height:50px;"></textarea>
+		<button type="button" id="button_new" class="btn btn-primary" onclick="new_vocart()">New</button>
 		 </div>
-		 <div class="blog-post" id="all_articles_main"></div>
-		<div class="blog-post" id="practice_main"></div>		 
-         <div class="blog-post" id="vocart_main">
-            quoted from: 
-            <h2 class="blog-post-title" id="vocart_title">
-            </h2>
-            <div id="vocart_tags">
-               <!--<span class="badge bg-primary" >Stratechery</span>-->
-            </div>
-            <!--<p class="blog-post-meta">文章日期: <span>January 12, 2021</span> </p>-->
-            <div id="vocarts">
-            </div>
-            <!--
-               <aside class="col-md-4 blog-sidebar">
-                 <div class="p-4 mb-3 bg-light rounded">
-                   <h4 class="font-italic">About</h4>
-                   <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                 </div>
-               
-                 <div class="p-4">
-                   <h4 class="font-italic">Archives</h4>
-                   <ol class="list-unstyled mb-0">
-                     <li><a href="#">March 2014</a></li>
-                     <li><a href="#">February 2014</a></li>
-                   </ol>
-                 </div>
-               -->
-            </aside><!-- /.blog-sidebar -->
-         </div>
+		 
 		 
          <!-- /.row -->
       </main>

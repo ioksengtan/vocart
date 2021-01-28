@@ -303,8 +303,8 @@ var ComponentVocart = {
           <div class='card-body'>\
             <p class='card-text'>" + DataVocart.vocs[voc_id].definition + "</p>";
 
-            for (example_id in DataVocart.vocs[voc_id].examples) {
-                reg_str += "ex:  " + DataVocart.vocs[voc_id].examples[example_id] + "<br/>";
+            for (example_id in DataVocart.vocs[voc_id].ex) {
+                reg_str += "ex:  " + DataVocart.vocs[voc_id].ex[example_id] + "<br/>";
             }
             reg_str += "\
           </div>\
@@ -464,7 +464,8 @@ function show_vocart_main(date) {
 		$('#vocarts').append('<h1><a href="'+ DataArticles.table[ArticleIdDict[date]].link +'" target="_blank">' + ArticleTitleDict[date]+'</a></h1>');
 		$.get(appUrl, parameter, function(data) {
 			//console.log(data);			
-			var DataVocarts = JSON.parse(data);
+			DataVocarts = JSON.parse(data);
+			console.log(DataVocarts);
 			var componentVocarts = Object.create(ComponentVocarts);
 			componentVocarts.create(DataVocarts.table);
 			
