@@ -1,0 +1,34 @@
+[
+	{
+		'quote': {
+			'content':'Assuming Taiwanese forces were to be overwhelmed during an invasion, “there is no reason why they would leave these facilities intact,” he said. And preserving the world’s most advanced fabs “is in the interests of everyone.”',
+			[
+				{
+					'voc': 'intact',
+					'type': 'adjective',
+					'definition': 'not damaged',
+					'ex:':[
+						'It's difficult to emerge from such a scandal with your reputation still intact.'
+					]	
+				},
+			]
+		}
+	},
+	{
+		'quote': {
+			'content':'<quote>',
+			[
+				{
+					'voc': '<voc>',
+					'type': '<type>',
+					'definition': '<definition>',
+					'ex:':[
+						'<ex1>',
+						'<ex2>',
+					]	
+				},
+			]
+		}
+	},
+	
+]

@@ -4,39 +4,13 @@ var sheetName = 'articles';
 var load_status = {
     'articles': false,
 }
-parameter = {
-    url: sheetsUrl,
-    name: sheetName,
-    command: 'getAllArticles'
-};
+
 $(document).ready(function() {
     $('#vocart_main').hide()
     $('#all_articles_main').hide()
     $('#practice_main').hide();
 
-    DataVocartCalendar = {
-
-        2021: {
-            1: {
-                15: 'vocart',
-                16: 'na_tree-fill',
-                17: 'na_bicycle',
-                18: 'na_tree-fill',
-                19: 'na_tree-fill',
-                20: 'na_tree-fill',
-                21: 'na_tree-fill',
-                22: 'vocart',
-            }
-        },
-        2020: {
-            12: {
-                27: 'vocart',
-                30: 'vocart',
-            }
-        },
-
-
-    }
+    
     Months = {
         1: 'January',
         2: 'Feburary',
@@ -130,7 +104,11 @@ $(document).ready(function() {
     renderComponent('#vocart_tags', componentVocartTags);
 
     renderComponent('#practice_main', componentPractice);
-    
+    parameter = {
+		url: sheetsUrl,
+		name: sheetName,
+		command: 'getAllArticles'
+	};
 	parameter.command = 'getAllArticles';
 		$.get(appUrl, parameter, function(data) {
 			//console.log(data);			
@@ -138,10 +116,14 @@ $(document).ready(function() {
 			//var componentVocarts = Object.create(ComponentVocarts);
 			//componentVocarts.create(DataVocarts.table);
 			//renderComponent('#vocarts', componentVocarts);
-			[DataVocartCalendar, ArticleId] = DataArticles2VocartCalendar(DataArticles);
+			[DataVocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict] = DataArticles2VocartCalendar(DataArticles);
 			var componentVocartCalendar = Object.create(ComponentVocartCalendar);
 			componentVocartCalendar.create(DataVocartCalendar, ArticleId);
 			renderComponent('#calendar_main', componentVocartCalendar);
+			
+            var componentArticles = Object.create(ComponentArticles);
+            componentArticles.create(DataArticles.table, ArticleId);
+            renderComponent('#all_articles_main', componentArticles);
 		});
 		
 		/*
@@ -172,14 +154,18 @@ $(document).ready(function() {
 });
 
 function DataArticles2VocartCalendar(DataArticles){
-	let VocartCalendar = {}
-	let ArticleId = {}
+	let VocartCalendar = {};
+	let ArticleId = {};
+	let ArticleTitleDict = {};
+	let ArticleIdDict = {};
 	for (i in DataArticles.table){
 		var theYear = DataArticles.table[i].year;
 		var theMonth = DataArticles.table[i].month;
 		var theDate = DataArticles.table[i].date;
 		var theType = DataArticles.table[i].type;
 		var theArtId = DataArticles.table[i].art_id;
+		ArticleTitleDict[theArtId] = DataArticles.table[i].title;
+		ArticleIdDict[theArtId] = i;
 		//console.log(theYear + ','+theMonth + ','+theDate+','+theType);
 		if (theYear in VocartCalendar){
 			if (theMonth in VocartCalendar[theYear]){
@@ -202,7 +188,7 @@ function DataArticles2VocartCalendar(DataArticles){
 		
 	}
 	
-	return [VocartCalendar, ArticleId]
+	return [VocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict]
 }
 
 function cleanDiv(div){
@@ -352,11 +338,16 @@ var ComponentVocartTitle = {
 
 var ComponentArticles = {
     dom: '',
-    create: function(articles) {
+    create: function(articles, ArticleId) {
+		//console.log(articles);
         var ele = document.createElement('div');
+		$(ele).append('<ul>');
         for (article_id in articles) {
-            $(ele).append("<p>" + articles[article_id]['title'] + "</p>")
+			if(articles[article_id].type =='vocart' & articles[article_id].title !=''){
+				$(ele).append("<li><a href='javascript:show_vocart_main("+ ArticleId[articles[article_id].year][articles[article_id].month][articles[article_id].date] +")'>" + articles[article_id]['title'] + "</a>(<a href='"+ articles[article_id].link +"'>[source]</a>)</li>")
+			}
         }
+		$(ele).append('</ul>');
         //console.log(this.dom);
         this.dom = ele;
     }
@@ -429,21 +420,7 @@ function show_all_articles() {
 	
     if (load_status.articles == false) {
         load_status.articles = true
-		parameter = {
-			url: sheetsUrl,
-			command: 'getAllArticles'
-		};
-        $.get(appUrl, parameter, function(data) {
 		
-            var input_buffer = JSON.parse(data);
-            console.log(input_buffer);
-            DataArticles = {}
-            DataArticles['articles'] = input_buffer.table;
-            var componentArticles = Object.create(ComponentArticles);
-            componentArticles.create(DataArticles.articles);
-            renderComponent('#all_articles_main', componentArticles);
-
-        });
     }
 	
 }
@@ -464,13 +441,16 @@ function show_vocart_main(date) {
     $('#practice_main').hide();
 	
 	if(date == 'latest'){
-		cleanDiv('#vocarts')
+		cleanDiv('#vocarts');
+		
+		$('#vocarts').append('<h1><a href="'+ DataArticles.table[DataArticles.table.length-1].link +'" target="_blank">' + DataArticles.table[DataArticles.table.length-1].title+'</a></h1>');
 		parameter.command = 'getLatestArticle';
 		$.get(appUrl, parameter, function(data) {
 			//console.log(data);			
 			var DataVocarts = JSON.parse(data);
 			var componentVocarts = Object.create(ComponentVocarts);
 			componentVocarts.create(DataVocarts.table);
+			
 			renderComponent('#vocarts', componentVocarts);
 		});
 	}else{
@@ -481,6 +461,7 @@ function show_vocart_main(date) {
 			article_id: date
 		};
 		cleanDiv('#vocarts')
+		$('#vocarts').append('<h1><a href="'+ DataArticles.table[ArticleIdDict[date]].link +'" target="_blank">' + ArticleTitleDict[date]+'</a></h1>');
 		$.get(appUrl, parameter, function(data) {
 			//console.log(data);			
 			var DataVocarts = JSON.parse(data);
