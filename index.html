@@ -10,7 +10,9 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://d3js.org/d3.v4.js"></script>
       <script src="index.js"></script>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
       <title>Vocart</title>
    </head>
    <body>
@@ -27,9 +29,9 @@
       </div>
       <div class="nav-scroller py-1 mb-2 ">
          <nav class="nav d-flex justify-content-between">
-            <a class="p-2 text-muted" href="javascript:show_practice_main()">Practice</a>
+            <!--<a class="p-2 text-muted" href="javascript:show_practice_main()">Practice</a>-->
             <a class="p-2 text-muted" href="javascript:show_all_articles()">All Articles</a>
-            <a class="p-2 text-muted" href="javascript:show_vocart_main('latest')">Daily Vocs</a>
+            <a class="p-2 text-muted" href="javascript:show_vocart_main('latest')">Daily Vocaburaries</a>
             <a class="p-2 text-muted" href="#">About</a>
          </nav>
       </div>
@@ -37,31 +39,55 @@
          <div class="row">
          <div class="col-md-12 blog-main ">
          <h3 class="pb-4 mb-4 font-italic border-bottom">
-               每天幾個單字，一週幾篇文章
+            每天幾個單字，一週幾篇文章
          </h3>
          <div class="blog-post col-md-4" id="calendar_main">
-			
+	    <div class="spinner-border" role="status" id="calendar_loading">
+		  <span class="sr-only">Loading...</span>
+		</div>
          </div>
-		 <div class="col-md-8">
-		 <div class="blog-post" id="main">
-		 <h1>Vocart = vocaburary in articles.</h1>
-		 <p>
-		 來源有Stratechery, Bloomberg, techmeme, 還有相關書籍
-		 </p>
+		 
+         <div class="col-md-8">
+         <div class="blog-post" id="main">
+            <h1>Vocart = vocaburary in articles.</h1>
+            <p>
+               來源有Stratechery, Bloomberg, techmeme, techcrunch, 還有相關書籍
+            </p>
+			<h2>最新的五篇文章：</h2>
+            <div id="curve_chart" style="width: 100%; height: 500px"></div>
+         </div>
+         <div class="blog-post" id="practice_card_main">
+           
+         </div>
+         <div class="blog-post" id="all_articles_main">
+            <div class="accordion" id="accordionExample"></div>
+         </div>
+         <div class="blog-post" id="practice_main">
+			<input type="text" id="pin" name="pin" maxlength="1" size="1">
+            <input type="text" id="pin" name="pin" maxlength="1" size="1">
+            <input type="text" id="pin" name="pin" maxlength="1" size="1">
+            <input type="text" id="pin" name="pin" maxlength="1" size="1">
+            <input type="text" id="pin" name="pin" maxlength="1" size="1">
+			<div onkeypress="return (this.innerText.length <= 1)" contenteditable="true">
 		 
 		 </div>
-		 <div class="blog-post" id="all_articles_main"></div>
-		<div class="blog-post" id="practice_main"></div>		 
+		 </div>
+
          <div class="blog-post" id="vocart_main">
-            quoted from: 
+            
             <h2 class="blog-post-title" id="vocart_title">
             </h2>
             <div id="vocart_tags">
                <!--<span class="badge bg-primary" >Stratechery</span>-->
             </div>
             <!--<p class="blog-post-meta">文章日期: <span>January 12, 2021</span> </p>-->
+			
             <div id="vocarts">
+				
             </div>
+			<div class="spinner-border" role="status" id="vocarts_loading">
+				  <span class="sr-only">Loading...</span>
+			</div>
             <!--
                <aside class="col-md-4 blog-sidebar">
                  <div class="p-4 mb-3 bg-light rounded">
@@ -79,13 +105,11 @@
                -->
             </aside><!-- /.blog-sidebar -->
          </div>
-		 
          <!-- /.row -->
       </main>
       <!-- /.container -->
       <footer class="blog-footer">
          <p>
-            
          </p>
       </footer>
       <!-- Optional JavaScript; choose one of the two! -->

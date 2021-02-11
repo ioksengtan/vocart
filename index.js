@@ -10,7 +10,53 @@ $(document).ready(function() {
     $('#all_articles_main').hide()
     $('#practice_main').hide();
 
-    
+    google.charts.load('current', {
+        'packages': ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Year', 'total amount of vocaburaries'],
+            [new Date(2021, 1, 17), 22],
+            [new Date(2021, 1, 26), 55],
+            [new Date(2021, 1, 27), 65],
+            [new Date(2021, 2, 7), 71],
+            [new Date(2021, 2, 8), 77],
+            [new Date(2021, 2, 9), 85],
+            [new Date(2021, 2, 10), 92],
+            [new Date(2021, 2, 11), 101]
+        ]);
+
+        var options = {
+            title: 'Vocaburary amount in Vocart',
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+    }
+
+
+    data = [{
+            date: "2013-04-28",
+            value: 135.98
+
+        },
+        {
+            date: "2014-04-28",
+            value: 145.98
+
+        },
+        {
+            date: "2015-04-28",
+            value: 155.98
+
+        },
+    ]
     Months = {
         1: 'January',
         2: 'Feburary',
@@ -93,40 +139,38 @@ $(document).ready(function() {
     var componentVocartTitle = Object.create(ComponentVocartTitle);
     var componentVocartTags = Object.create(ComponentVocartTags);
 
-    var componentPractice = Object.create(ComponentPractice);
     
     
+
 	
-    componentPractice.create(DataPractice);
-	
-	
+
     renderComponent('#vocart_title', componentVocartTitle);
     renderComponent('#vocart_tags', componentVocartTags);
-
-    renderComponent('#practice_main', componentPractice);
+    
+    
     parameter = {
-		url: sheetsUrl,
-		name: sheetName,
-		command: 'getAllArticles'
-	};
-	parameter.command = 'getAllArticles';
-		$.get(appUrl, parameter, function(data) {
-			//console.log(data);			
-			DataArticles = JSON.parse(data);
-			//var componentVocarts = Object.create(ComponentVocarts);
-			//componentVocarts.create(DataVocarts.table);
-			//renderComponent('#vocarts', componentVocarts);
-			[DataVocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict] = DataArticles2VocartCalendar(DataArticles);
-			var componentVocartCalendar = Object.create(ComponentVocartCalendar);
-			componentVocartCalendar.create(DataVocartCalendar, ArticleId);
-			renderComponent('#calendar_main', componentVocartCalendar);
-			
-            var componentArticles = Object.create(ComponentArticles);
-            componentArticles.create(DataArticles.table, ArticleId);
-            renderComponent('#all_articles_main', componentArticles);
-		});
-		
-		/*
+        url: sheetsUrl,
+        name: sheetName,
+        command: 'getAllArticles'
+    };
+    parameter.command = 'getAllArticles';
+    $.get(appUrl, parameter, function(data) {
+        //console.log(data);			
+        DataArticles = JSON.parse(data);
+        //var componentVocarts = Object.create(ComponentVocarts);
+        //componentVocarts.create(DataVocarts.table);
+        //renderComponent('#vocarts', componentVocarts);
+        [DataVocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict] = DataArticles2VocartCalendar(DataArticles);
+        var componentVocartCalendar = Object.create(ComponentVocartCalendar);
+        componentVocartCalendar.create(DataVocartCalendar, ArticleId);
+        renderComponent('#calendar_main', componentVocartCalendar);		
+		$('#calendar_loading').hide();
+        var componentArticles = Object.create(ComponentArticles);
+        componentArticles.create(DataArticles.table, ArticleId);
+        renderComponent('#all_articles_main', componentArticles);
+    });
+
+    /*
 		DataVocartCalendar = {
 
         2021: {
@@ -153,46 +197,46 @@ $(document).ready(function() {
 
 });
 
-function DataArticles2VocartCalendar(DataArticles){
-	let VocartCalendar = {};
-	let ArticleId = {};
-	let ArticleTitleDict = {};
-	let ArticleIdDict = {};
-	for (i in DataArticles.table){
-		var theYear = DataArticles.table[i].year;
-		var theMonth = DataArticles.table[i].month;
-		var theDate = DataArticles.table[i].date;
-		var theType = DataArticles.table[i].type;
-		var theArtId = DataArticles.table[i].art_id;
-		ArticleTitleDict[theArtId] = DataArticles.table[i].title;
-		ArticleIdDict[theArtId] = i;
-		//console.log(theYear + ','+theMonth + ','+theDate+','+theType);
-		if (theYear in VocartCalendar){
-			if (theMonth in VocartCalendar[theYear]){
-				VocartCalendar[theYear][theMonth][theDate] = theType;
-				ArticleId[theYear][theMonth][theDate] = theArtId;
-			}else{
-				VocartCalendar[theYear][theMonth] = {};
-				VocartCalendar[theYear][theMonth][theDate] = theType;
-				ArticleId[theYear][theMonth] = {};
-				ArticleId[theYear][theMonth][theDate] = theArtId;
-			}
-		}else{
-			VocartCalendar[theYear] = {};
-			VocartCalendar[theYear][theMonth] = {};
-			VocartCalendar[theYear][theMonth][theDate] = theType;
-			ArticleId[theYear] = {};
-			ArticleId[theYear][theMonth] = {};
-			ArticleId[theYear][theMonth][theDate] = theArtId;
-		}
-		
-	}
-	
-	return [VocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict]
+function DataArticles2VocartCalendar(DataArticles) {
+    let VocartCalendar = {};
+    let ArticleId = {};
+    let ArticleTitleDict = {};
+    let ArticleIdDict = {};
+    for (i in DataArticles.table) {
+        var theYear = DataArticles.table[i].year;
+        var theMonth = DataArticles.table[i].month;
+        var theDate = DataArticles.table[i].date;
+        var theType = DataArticles.table[i].type;
+        var theArtId = DataArticles.table[i].art_id;
+        ArticleTitleDict[theArtId] = DataArticles.table[i].title;
+        ArticleIdDict[theArtId] = i;
+        //console.log(theYear + ','+theMonth + ','+theDate+','+theType);
+        if (theYear in VocartCalendar) {
+            if (theMonth in VocartCalendar[theYear]) {
+                VocartCalendar[theYear][theMonth][theDate] = theType;
+                ArticleId[theYear][theMonth][theDate] = theArtId;
+            } else {
+                VocartCalendar[theYear][theMonth] = {};
+                VocartCalendar[theYear][theMonth][theDate] = theType;
+                ArticleId[theYear][theMonth] = {};
+                ArticleId[theYear][theMonth][theDate] = theArtId;
+            }
+        } else {
+            VocartCalendar[theYear] = {};
+            VocartCalendar[theYear][theMonth] = {};
+            VocartCalendar[theYear][theMonth][theDate] = theType;
+            ArticleId[theYear] = {};
+            ArticleId[theYear][theMonth] = {};
+            ArticleId[theYear][theMonth][theDate] = theArtId;
+        }
+
+    }
+
+    return [VocartCalendar, ArticleId, ArticleTitleDict, ArticleIdDict]
 }
 
-function cleanDiv(div){
-	$(div).empty();
+function cleanDiv(div) {
+    $(div).empty();
 }
 
 function renderComponent(div, component) {
@@ -235,7 +279,9 @@ var ComponentVocartCalendar = {
                 for (var date in DataVocartCalendar[year][month]) {
                     if (DataVocartCalendar[year][month][date].includes("na")) {
                         $(ele).append('<i class="bi bi-' + DataVocartCalendar[year][month][date].split('na_')[1] + '"></i>');
-                    } else {
+                    } else if ( DataVocartCalendar[year][month][date].includes("practice") ){						
+						$(ele).append('<a href="javascript:show_practice(' + ArticleId[year][month][date] + ')">' + '<i class="bi bi-stickies"></i>' + '</a> ');
+					} else {
                         $(ele).append('<a href="javascript:show_vocart_main(' + ArticleId[year][month][date] + ')">' + date + '</a> ');
                     }
                 }
@@ -245,11 +291,21 @@ var ComponentVocartCalendar = {
         this.dom = ele;
     }
 }
-
+	
 var ComponentPractice = {
     dom: '',
     create: function(DataPractice) {
+		//console.log(DataPractice);
         var ele = document.createElement('div');
+		
+		$(ele).append('<div onkeypress="return (this.innerText.length <= ' + DataPractice.hint.length +')" contenteditable="true">'+ DataPractice.hint +'</div>');
+		$(ele).append('<p>' + DataPractice.description+ '</p>');
+		for ( example_id in DataPractice.examples ){
+			$(ele).append('<p>' + DataPractice.examples[example_id] + '</p>');
+		}
+		$(ele).append('<p>answer:' + DataPractice.answer + '</p>');
+		
+		/*
         $(ele).append('\
 			<div>' + DataPractice.title.content + '</div>\
 		');
@@ -268,6 +324,7 @@ var ComponentPractice = {
 
             $(ele).append('<p> ------ </p>');
         }
+		*/
         this.dom = ele;
         //console.log(this.dom);
     }
@@ -277,6 +334,7 @@ var ComponentVocarts = {
     create: function(DataVocarts) {
         //console.log(DataVocarts);
         var ele = document.createElement('div');
+		
         //$(ele).append('<h2>' + DataVocarts.title.content + '<h2>');
         for (var i in DataVocarts.vocarts) {
             var componentVocart_reg = Object.create(ComponentVocart);
@@ -317,6 +375,56 @@ var ComponentVocart = {
 
 }
 
+var ComponentCollapseArticle = {
+    dom: '',
+    create: function(title_in, content_in) {
+        var ele = document.createElement('div');
+        $(ele).append("	<div class=\"accordion-item\">\
+    <h2 class=\"accordion-header\" >\
+      <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\
+        " + title_in + "\
+      </button>\
+    </h2>\
+    <div id=\"collapseOne\" class=\"accordion-collapse collapse show\" aria-labelledby=\"headingOne\">\
+      <div class=\"accordion-body\">\
+        " + content_in + "\
+      </div>\
+    </div>\
+   </div>\
+   ");
+        this.dom = ele;
+    }
+    /*
+	<div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Accordion Item #1
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+   </div>
+	*/
+}
+
+/*
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+        Accordion Item #3
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+*/
+
 
 var ComponentVocartTitle = {
     dom: '',
@@ -339,15 +447,28 @@ var ComponentVocartTitle = {
 var ComponentArticles = {
     dom: '',
     create: function(articles, ArticleId) {
-		//console.log(articles);
+        //console.log(articles);
         var ele = document.createElement('div');
-		$(ele).append('<ul>');
+        $(ele).append('<ul>');
         for (article_id in articles) {
-			if(articles[article_id].type =='vocart' & articles[article_id].title !=''){
-				$(ele).append("<li><a href='javascript:show_vocart_main("+ ArticleId[articles[article_id].year][articles[article_id].month][articles[article_id].date] +")'>" + articles[article_id]['title'] + "</a>(<a href='"+ articles[article_id].link +"'>[source]</a>)</li>")
-			}
+            if (articles[article_id].type == 'vocart' & articles[article_id].title != '') {
+                //$(ele).append("<li><a href='javascript:show_vocart_main(" + ArticleId[articles[article_id].year][articles[article_id].month][articles[article_id].date] + ")'>" + articles[article_id]['title'] + "</a>(<a href='" + articles[article_id].link + "'>[source]</a>)</li>")
+				$(ele).append("	<div class=\"accordion-item\">\
+    <h2 class=\"accordion-header\" >\
+      <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\
+        " + articles[article_id]['year'] + '/' + articles[article_id]['month'] + '/' + articles[article_id]['date'] + ' ' + articles[article_id]['title'] + "\
+      </button>\
+    </h2>\
+    <div id=\"collapseOne\" class=\"accordion-collapse collapse show\" aria-labelledby=\"headingOne\">\
+      <div class=\"accordion-body\">\
+        " + articles[article_id]['content'] + "\
+      </div>\
+    </div>\
+   </div>\
+   ");
+            }
         }
-		$(ele).append('</ul>');
+        $(ele).append('</ul>');
         //console.log(this.dom);
         this.dom = ele;
     }
@@ -417,12 +538,12 @@ function show_all_articles() {
     $('#vocart_main').hide();
     $('#all_articles_main').show()
     $('#practice_main').hide();
-	
+
     if (load_status.articles == false) {
         load_status.articles = true
-		
+
     }
-	
+
 }
 
 function show_practice_main() {
@@ -432,45 +553,81 @@ function show_practice_main() {
     $('#vocart_main').hide();
     $('#practice_main').show();
 }
-var tmp='test';
-function show_vocart_main(date) {	
+var tmp = 'test';
+
+function show_practice(date) {
     //console.log(date);
     $('#all_articles_main').hide()
     $('#main').hide();
     $('#vocart_main').show();
     $('#practice_main').hide();
 	
-	if(date == 'latest'){
-		cleanDiv('#vocarts');
-		
-		$('#vocarts').append('<h1><a href="'+ DataArticles.table[DataArticles.table.length-1].link +'" target="_blank">' + DataArticles.table[DataArticles.table.length-1].title+'</a></h1>');
-		parameter.command = 'getLatestArticle';
-		$.get(appUrl, parameter, function(data) {
-			//console.log(data);			
-			var DataVocarts = JSON.parse(data);
-			var componentVocarts = Object.create(ComponentVocarts);
-			componentVocarts.create(DataVocarts.table);
-			
-			renderComponent('#vocarts', componentVocarts);
-		});
-	}else{
-		parameter = {
-			url: sheetsUrl,
-			name: sheetName,
-			command: 'getArticle',
-			article_id: date
-		};
-		cleanDiv('#vocarts')
-		$('#vocarts').append('<h1><a href="'+ DataArticles.table[ArticleIdDict[date]].link +'" target="_blank">' + ArticleTitleDict[date]+'</a></h1>');
-		$.get(appUrl, parameter, function(data) {
-			//console.log(data);			
-			DataVocarts = JSON.parse(data);
-			console.log(DataVocarts);
-			var componentVocarts = Object.create(ComponentVocarts);
-			componentVocarts.create(DataVocarts.table);
-			
-			renderComponent('#vocarts', componentVocarts);
-		});
+	cleanDiv('#vocarts');
+	var DataPractices = [
+		{
+			'hint':'a_______',
+			'description':'a person who believes strongly in political or social change and takes part in activities such as public protests to try to make this happen  ',
+			'examples':['an animal rights a_______'],
+			'answer':'activist'
+		},
+		{
+			'hint':'b_______',
+			'description':'b person who believes strongly in political or social change and takes part in activities such as public protests to try to make this happen  ',
+			'examples':['bn animal rights a_______'],
+			'answer':'bctivist'
+		}		
+	]
+	var componentPracticeList = []
+	for (i in DataPractices){
+		var componentPractice = Object.create(ComponentPractice);	
+		componentPractice.create(DataPractices[i]);
+		componentPracticeList.push(componentPractice)
+		renderComponent('#vocarts', componentPractice);
 	}
 	
+
+}
+
+function show_vocart_main(date) {
+    //console.log(date);
+    $('#all_articles_main').hide()
+    $('#main').hide();
+    $('#vocart_main').show();
+    $('#practice_main').hide();
+	$('#vocarts_loading').show();
+    if (date == 'latest') {
+        cleanDiv('#vocarts');
+
+        $('#vocarts').append('<h1><a href="' + DataArticles.table[DataArticles.table.length - 1].link + '" target="_blank">' + DataArticles.table[DataArticles.table.length - 1].title + '</a></h1>');
+        parameter.command = 'getLatestArticle';
+        $.get(appUrl, parameter, function(data) {
+            //console.log(data);			
+			
+            var DataVocarts = JSON.parse(data);
+            var componentVocarts = Object.create(ComponentVocarts);
+            componentVocarts.create(DataVocarts.table);
+			renderComponent('#vocarts', "<p>quoted from: </p>");
+            renderComponent('#vocarts', componentVocarts);
+			$('#vocarts_loading').hide();
+        });
+    } else {
+        parameter = {
+            url: sheetsUrl,
+            name: sheetName,
+            command: 'getArticle',
+            article_id: date
+        };
+        cleanDiv('#vocarts')
+        $('#vocarts').append('<p>quoted from: </p><h1><a href="' + DataArticles.table[ArticleIdDict[date]].link + '" target="_blank">' + ArticleTitleDict[date] + '</a></h1>');
+        $.get(appUrl, parameter, function(data) {
+            //console.log(data);			
+            DataVocarts = JSON.parse(data);
+            //console.log(DataVocarts);
+            componentVocarts = Object.create(ComponentVocarts);
+            componentVocarts.create(DataVocarts.table);			
+            renderComponent('#vocarts', componentVocarts);
+			$('#vocarts_loading').hide();
+        });
+    }
+
 }
