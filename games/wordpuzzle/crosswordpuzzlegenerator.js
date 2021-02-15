@@ -155,6 +155,66 @@ let createCrossWordPuzzle = function()
                 }
             }
         }
+		$('#crosswordpuzzle_id').append('<table class="crossword" cellspacing="0" id="blank">\
+      <tbody>\
+	  <tr>\
+            <td class="nb" title="0, 0" style="height: 30px; width: 30px;"></td>\
+            <td class="nb" title="0, 1" style="height: 30px; width: 30px;"></td>\
+            <td class="b" title="0, 2" style="height: 30px; width: 30px;">\
+               <p class="n">1</p>\
+               <div class="od" contenteditable="true">s</div>\
+            </td>\
+            <td class="nb" title="0, 3" style="height: 30px; width: 30px;"></td>\
+            <td class="nb" title="0, 4" style="height: 30px; width: 30px;"></td>\
+            <td class="nb" title="0, 5" style="height: 30px; width: 30px;"></td>\
+            <td class="nb" title="0, 6" style="height: 30px; width: 30px;"></td>\
+            <td class="nb" title="0, 7" style="height: 30px; width: 30px;"></td>\
+         </tr>\
+		 </tbody>\
+   </table>'
+   );
+		
+        for (let row = 0; row < gridSize; ++row)
+        {
+            for (let column = 0; column < gridSize; ++column)
+            {
+				/*
+                let slot = document.getElementById(row + "_" + column);
+                if( bestGrid.isLetter(row, column))
+                {
+                    slot.innerHTML = bestGrid.grid[row][column];
+                    slot.style.borderBottom =  '1px solid #9a8e9a';
+                    slot.style.borderRight =  '1px solid #9a8e9a';
+                    slot.style.backgroundColor = 'rgb(255, 255, 255)'; 
+                }
+                else
+                {
+                    slot.innerHTML = "";
+                    slot.style.border =  '1px solid #0a0a0a';
+                    slot.style.backgroundColor = '#0a0a0a';
+                }
+				*/
+				/*
+				   <table class="crossword" cellspacing="0" id="blank">
+      <tbody>
+	  <tr>
+            <td class="nb" title="0, 0" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 1" style="height: 30px; width: 30px;"></td>
+            <td class="b" title="0, 2" style="height: 30px; width: 30px;">
+               <p class="n">1</p>
+               <div class="od" contenteditable="true">s</div>
+            </td>
+            <td class="nb" title="0, 3" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 4" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 5" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 6" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 7" style="height: 30px; width: 30px;"></td>
+         </tr>
+		 </tbody>
+   </table>
+	  */
+            }
+        }
     }
 
     let pushUsedWords = function( text )

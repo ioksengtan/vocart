@@ -44,13 +44,16 @@ let createCrossWordPuzzle = function()
                 {
                     if ( grid.update( word ) )
                     {
-                        pushUsedWords( word.text );
-                        return true;
+                        pushUsedWords( word.text );	
+						var placed = true;
+						//console.log(row + ' ' + column);
+                        return {placed, row, column};
                     }
                 }
             }
         }
-        return false;
+		var placed = false;
+        return {placed, row, column};
 
 	}
 
@@ -109,10 +112,13 @@ let createCrossWordPuzzle = function()
             let continuousFails = 0;
             for (let attempts = 0; attempts < attemptsToFitWords; ++attempts)
             {
-                let placed = attemptToPlaceWordOnGrid( grid, word );
+                let tmp = attemptToPlaceWordOnGrid( grid, word );
+				placed = tmp.placed;
+				//console.log(tmp.row + ' ' + tmp.column);
                 if( placed )
                 {
                     continuousFails = 0;
+					//console.log(tmp.row + ' ' + tmp.column + ' ' + word);
                 }
                 else
                 {
@@ -134,7 +140,7 @@ let createCrossWordPuzzle = function()
     }
     
     let displayCrosswordPuzzle = function( bestGrid )
-    {      
+    {	
         for (let row = 0; row < gridSize; ++row)
         {
             for (let column = 0; column < gridSize; ++column)
@@ -153,6 +159,72 @@ let createCrossWordPuzzle = function()
                     slot.style.border =  '1px solid #0a0a0a';
                     slot.style.backgroundColor = '#0a0a0a';
                 }
+            }
+        }
+		$('#crosswordpuzzle_id').append('<table class="crossword" cellspacing="0" id="table_blank">');		
+		$('#table_blank').append('<tbody id="table_content">');
+		for (let row = 0; row < gridSize; ++row)
+        {
+			$('#table_content').append('<tr>');
+            for (let column = 0; column < gridSize; ++column)
+            {
+					let slot = document.getElementById(row + "_" + column);
+					if( bestGrid.isLetter(row, column)){
+						$('#table_content').append('\
+						<td class="b" title="'+row+', '+column+'" style="height: 30px; width: 30px;">\
+						   <p class="n"></p>\
+						   <div class="od" contenteditable="true">'+ bestGrid.grid[row][column] +'</div>\
+						</td>\
+						');
+					}else{
+						$('#table_content').append('<td class="nb" title="0, 0" style="height: 30px; width: 30px;"></td>')
+					}				
+					
+			}
+			$('#table_content').append('</tr>');
+		}
+		//$('#crosswordpuzzle_id').append('</tbody>');
+		//$('#crosswordpuzzle_id').append('</table>');
+		
+        for (let row = 0; row < gridSize; ++row)
+        {
+            for (let column = 0; column < gridSize; ++column)
+            {
+				/*
+                let slot = document.getElementById(row + "_" + column);
+                if( bestGrid.isLetter(row, column))
+                {
+                    slot.innerHTML = bestGrid.grid[row][column];
+                    slot.style.borderBottom =  '1px solid #9a8e9a';
+                    slot.style.borderRight =  '1px solid #9a8e9a';
+                    slot.style.backgroundColor = 'rgb(255, 255, 255)'; 
+                }
+                else
+                {
+                    slot.innerHTML = "";
+                    slot.style.border =  '1px solid #0a0a0a';
+                    slot.style.backgroundColor = '#0a0a0a';
+                }
+				*/
+				/*
+				   <table class="crossword" cellspacing="0" id="blank">
+      <tbody>
+	  <tr>
+            <td class="nb" title="0, 0" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 1" style="height: 30px; width: 30px;"></td>
+            <td class="b" title="0, 2" style="height: 30px; width: 30px;">
+               <p class="n">1</p>
+               <div class="od" contenteditable="true">s</div>
+            </td>
+            <td class="nb" title="0, 3" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 4" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 5" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 6" style="height: 30px; width: 30px;"></td>
+            <td class="nb" title="0, 7" style="height: 30px; width: 30px;"></td>
+         </tr>
+		 </tbody>
+   </table>
+	  */
             }
         }
     }
